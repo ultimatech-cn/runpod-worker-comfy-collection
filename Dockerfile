@@ -37,7 +37,7 @@ RUN pip install fastapi[standard]==0.115.4 \
     torch
 
 # 运行 comfy 安装命令和初始化 git lfs
-RUN comfy --skip-prompt install --nvidia
+RUN comfy --skip-prompt install --nvidia --cuda-version 12.4
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
