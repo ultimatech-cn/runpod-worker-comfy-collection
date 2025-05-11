@@ -44,7 +44,7 @@ RUN pip install fastapi[standard]==0.115.4 \
     runpod
 
 # 运行 comfy 安装命令和初始化 git lfs
-RUN comfy install --version 0.3.30 --cuda-version 12.4 --nvidia
+RUN comfy --skip-prompt --workspace $COMFYUI_PATH install --version 0.3.30 --cuda-version 12.4 --nvidia
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
