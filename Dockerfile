@@ -3,6 +3,12 @@ FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
+# Prefer binary wheels over source distributions for faster pip installations
+ENV PIP_PREFER_BINARY=1
+# Ensures output from python is printed immediately to the terminal without buffering
+ENV PYTHONUNBUFFERED=1
+# Speed up some cmake builds
+ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 ENV TZ="Etc/UTC"
 
@@ -34,10 +40,11 @@ RUN pip install fastapi[standard]==0.115.4 \
     onnx \
     modelscope \
     transformers \
-    torch
+    torch \
+    runpod
 
 # 运行 comfy 安装命令和初始化 git lfs
-RUN comfy --skip-prompt install --nvidia --cuda-version 12.4
+RUN comfy install --version 0.3.30 --cuda-version 12.4 --nvidia
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
