@@ -3,12 +3,6 @@ FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
-# Prefer binary wheels over source distributions for faster pip installations
-ENV PIP_PREFER_BINARY=1
-# Ensures output from python is printed immediately to the terminal without buffering
-ENV PYTHONUNBUFFERED=1
-# Speed up some cmake builds
-ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 ENV TZ="Etc/UTC"
 
@@ -40,11 +34,10 @@ RUN pip install fastapi[standard]==0.115.4 \
     onnx \
     modelscope \
     transformers \
-    torch \
     runpod
 
-# 运行 comfy 安装命令和初始化 git lfs
-RUN comfy --skip-prompt --workspace $COMFYUI_PATH install --version 0.3.30 --cuda-version 12.4 --nvidia
+# 运行 comfy 安装命令
+RUN comfy --skip-prompt install --nvidia
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
@@ -82,6 +75,7 @@ RUN git clone https://github.com/Goktug/comfyui-saveimage-plus /root/comfy/Comfy
 
 # 创建目录
 RUN mkdir -p /root/comfy/ComfyUI/web/extensions/Gemini_Zho \
+    && mkdir -p /root/comfy/ComfyUI/temp/ckpts \
     && mkdir /root/comfy/ComfyUI/models/clip/sd3 \
     && mkdir /root/comfy/ComfyUI/models/LLM \
     && mkdir /root/comfy/ComfyUI/models/Janus-Pro \
@@ -108,9 +102,8 @@ RUN git clone https://huggingface.co/microsoft/Florence-2-base /root/comfy/Comfy
 RUN git clone https://huggingface.co/deepseek-ai/Janus-Pro-1B /root/comfy/ComfyUI/models/Janus-Pro/Janus-Pro-1B
 RUN git clone https://huggingface.co/deepseek-ai/Janus-Pro-7B /root/comfy/ComfyUI/models/Janus-Pro/Janus-Pro-7B
 
-# 强制重新安装 timm 并创建临时目录
-RUN python -m pip install --force-reinstall timm>=0.9.16 \
-    && mkdir /tmp/ckpts
+# 强制重新安装 timm
+RUN python -m pip install --force-reinstall timm>=0.9.16
 
 # 创建目录并下载文件
 RUN mkdir -p /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators \
@@ -119,6 +112,7 @@ RUN mkdir -p /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllya
 COPY src/start.sh /root/
 COPY src/rp_handler.py /root/
 COPY workflow.json /root/
+COPY config.ini /root/comfy/ComfyUI/user/default/ComfyUI-Manager/config.ini
 
 RUN chmod +x /root/start.sh
 
