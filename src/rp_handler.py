@@ -47,16 +47,16 @@ def validate_input(job_input):
             return None, "Invalid JSON format in input"
 
     # Read workflow from file
-    try:
-        with open('/root/workflow.json', 'r') as f:
-            workflow = json.load(f)
-    except Exception as e:
-        return None, f"Error reading workflow from file: {str(e)}"
+    # try:
+    #     with open('/root/workflow.json', 'r') as f:
+    #         workflow = json.load(f)
+    # except Exception as e:
+    #     return None, f"Error reading workflow from file: {str(e)}"
 
     # Validate 'workflow' in input
-    # workflow = job_input.get("workflow")
-    # if workflow is None:
-    #     return None, "Missing 'workflow' parameter"
+    workflow = job_input.get("workflow")
+    if workflow is None:
+        return None, "Missing 'workflow' parameter"
 
     # Validate 'images' in input, if provided
     images = job_input.get("images")
