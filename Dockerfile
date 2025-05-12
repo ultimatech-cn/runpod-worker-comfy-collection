@@ -1,5 +1,5 @@
 # 使用包含CUDA 12.2的NVIDIA基础镜像
-FROM runpod/pytorch:2.4.0-py3.11-cuda12.6.1-devel-ubuntu22.04
+FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -37,7 +37,7 @@ RUN pip install fastapi[standard]==0.115.4 \
     runpod
 
 # 运行 comfy 安装命令
-RUN comfy --skip-prompt install --nvidia
+RUN comfy --skip-prompt install --nvidia --cuda-version 12.4
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
