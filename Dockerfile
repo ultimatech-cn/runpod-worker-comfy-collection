@@ -23,6 +23,9 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Clean up to reduce image size
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
+RUN pip uninstall -y torch torchaudio torchvision
+RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
+
 # 安装 Python 包
 RUN pip install fastapi[standard]==0.115.4 \
     comfy-cli \
