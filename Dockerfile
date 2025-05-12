@@ -13,6 +13,11 @@ ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 ENV TZ="Etc/UTC"
 
 ENV COMFYUI_PATH=/root/comfy/ComfyUI
+# 关键：显式设置 CUDA 主版本环境变量
+ENV CUDA_VERSION=12.6
+
+# 添加 CUDA 符号链接
+RUN ln -s /usr/local/cuda-12.6 /usr/local/cuda
 
 # Install Python, git and other necessary tools
 RUN apt-get update && apt-get install -y \
@@ -39,7 +44,7 @@ RUN pip install uv
 
 # Install comfy-cli
 RUN uv pip install comfy-cli --system
-
+# 运行 comfy 安装命令
 RUN comfy --skip-prompt install --nvidia
 
 RUN pip uninstall -y torch torchaudio torchvision
@@ -58,8 +63,6 @@ RUN uv pip install \
     transformers \
     runpod \
     --system
-
-# 运行 comfy 安装命令
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
