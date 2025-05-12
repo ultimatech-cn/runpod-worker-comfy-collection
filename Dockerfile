@@ -89,7 +89,7 @@ RUN mkdir -p /root/comfy/ComfyUI/web/extensions/Gemini_Zho \
     && mkdir /root/comfy/ComfyUI/models/grounding-dino
 
 # 下载模型
-RUN modelscope download --model 'licyks/control-lora' control-lora-canny-rank256.safetensors control-lora-depth-rank256.safetensors --local-dir '/root/comfy/ComfyUI/models/controlnet/'
+RUN modelscope download --model 'licyks/control-lora' control-lora-canny-rank256.safetensors control-lora-depth-rank256.safetensors --local_dir '/root/comfy/ComfyUI/models/controlnet/'
 RUN huggingface-cli login --token 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
 RUN huggingface-cli download black-forest-labs/FLUX.1-Fill-dev ae.safetensors --local-dir /root/comfy/ComfyUI/models/vae/
 RUN huggingface-cli download comfyanonymous/flux_text_encoders t5xxl_fp16.safetensors clip_l.safetensors --local-dir /root/comfy/ComfyUI/models/clip/sd3/
