@@ -1,5 +1,5 @@
 # 使用包含CUDA 12.2的NVIDIA基础镜像
-FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+FROM runpod/pytorch:2.4.0-py3.11-cuda12.6.1-devel-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
