@@ -1,19 +1,30 @@
 # 使用包含CUDA 12.2的NVIDIA基础镜像
-FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+FROM nvidia/cuda:12.6.0-cudnn-runtime-ubuntu22.04
 
 # Prevents prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
+# Prefer binary wheels over source distributions for faster pip installations
+ENV PIP_PREFER_BINARY=1
+# Ensures output from python is printed immediately to the terminal without buffering
+ENV PYTHONUNBUFFERED=1
+# Speed up some cmake builds
+ENV CMAKE_BUILD_PARALLEL_LEVEL=8
 
 ENV TZ="Etc/UTC"
 
 ENV COMFYUI_PATH=/root/comfy/ComfyUI
 
-# 安装系统依赖
+# Install Python, git and other necessary tools
 RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3-pip \
     git \
-    ffmpeg \
     wget \
-    curl
+    libgl1 \
+    ffmpeg \
+    curl \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python \
+    && ln -sf /usr/bin/pip3 /usr/bin/pip
 
 # 安装 git-lfs
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
@@ -23,12 +34,14 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 # Clean up to reduce image size
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-RUN pip uninstall -y torch torchaudio torchvision
-RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
+# Install comfy
+RUN git clone https://github.com/comfyanonymous/ComfyUI /root/comfy/ComfyUI
+RUN python -s -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu126
+RUN python -s -m pip install -r /root/comfy/ComfyUI/requirements.txt
 
 # 安装 Python 包
-RUN pip install fastapi[standard]==0.115.4 \
-    comfy-cli \
+RUN python -s -m pip install \
+    fastapi[standard]==0.115.4 \
     opencv-python \
     imageio-ffmpeg \
     hf_transfer \
@@ -37,41 +50,39 @@ RUN pip install fastapi[standard]==0.115.4 \
     onnx \
     modelscope \
     transformers \
+    huggingface_hub[hf_transfer]==0.26.2 \
     runpod
-
-# 运行 comfy 安装命令
-RUN comfy --skip-prompt install --nvidia --cuda-version 12.4
 
 # 克隆自定义节点仓库并安装依赖
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
 RUN git clone https://github.com/Fannovel16/comfyui_controlnet_aux /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/requirements.txt
 RUN git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git /root/comfy/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack/requirements.txt
 RUN git clone https://github.com/chflame163/ComfyUI_LayerStyle /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle/requirements.txt
 RUN git clone https://github.com/yolain/ComfyUI-Easy-Use /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use/requirements.txt
 RUN git clone https://github.com/kijai/ComfyUI-KJNodes.git /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes/requirements.txt
 RUN git clone https://github.com/jags111/efficiency-nodes-comfyui /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui/requirements.txt
 RUN git clone https://github.com/storyicon/comfyui_segment_anything.git /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything/requirements.txt
 RUN git clone https://github.com/pythongosssss/ComfyUI-WD14-Tagger /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger/requirements.txt
 RUN git clone https://github.com/cubiq/ComfyUI_essentials.git /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials/requirements.txt
 RUN git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-Gemini /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini/requirements.txt
 RUN git clone https://github.com/chrisgoringe/cg-use-everywhere /root/comfy/ComfyUI/custom_nodes/cg-use-everywhere
 RUN git clone https://github.com/CY-CHENYUE/ComfyUI-Janus-Pro /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro/requirements.txt
 RUN git clone https://github.com/melMass/comfy_mtb /root/comfy/ComfyUI/custom_nodes/comfy_mtb \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfy_mtb/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfy_mtb/requirements.txt
 RUN git clone https://github.com/wallish77/wlsh_nodes /root/comfy/ComfyUI/custom_nodes/wlsh_nodes \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/wlsh_nodes/requirements.txt
+    && python -s -m pip install -r /root/comfy/ComfyUI/custom_nodes/wlsh_nodes/requirements.txt
 RUN git clone https://github.com/M1kep/ComfyLiterals /root/comfy/ComfyUI/custom_nodes/ComfyLiterals
 RUN git clone https://github.com/ai-shizuka/ComfyUI-tbox /root/comfy/ComfyUI/custom_nodes/ComfyUI-tbox
 RUN git clone https://github.com/Goktug/comfyui-saveimage-plus /root/comfy/ComfyUI/custom_nodes/comfyui-saveimage-plus
@@ -106,7 +117,7 @@ RUN git clone https://huggingface.co/deepseek-ai/Janus-Pro-1B /root/comfy/ComfyU
 RUN git clone https://huggingface.co/deepseek-ai/Janus-Pro-7B /root/comfy/ComfyUI/models/Janus-Pro/Janus-Pro-7B
 
 # 强制重新安装 timm
-RUN python -m pip install --force-reinstall timm>=0.9.16
+RUN python -s -m pip install --force-reinstall timm>=0.9.16
 
 # 创建目录并下载文件
 RUN mkdir -p /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators \
