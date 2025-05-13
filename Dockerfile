@@ -30,7 +30,7 @@ RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install comfy
 RUN pip install comfy-cli
-RUN comfy --skip-prompt install --nvidia
+RUN comfy --skip-prompt install --nvidia --cuda-version 12.6
 
 # 安装 Python 包
 RUN python -m pip install \
