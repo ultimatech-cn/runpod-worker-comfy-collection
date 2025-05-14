@@ -270,6 +270,7 @@ def process_output_images(outputs, job_id):
                     )
                     print(f"worker-comfyui - Encoded {filename} as base64")
                 else:
+                    continue
                     # Try to find the image in the temp folder
                     temp_image_path = f"{COMFY_TEMP_PATH}/{output_images}"
                     print(f"runpod-worker-comfy - trying temp path: {temp_image_path}")
