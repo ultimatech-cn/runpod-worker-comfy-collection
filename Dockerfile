@@ -1,33 +1,28 @@
-FROM python:3.11.10-slim-bookworm
+FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
 
 # Prevent prompts from packages asking for user input during installation
 ENV DEBIAN_FRONTEND=noninteractive
+
 ENV TZ="Etc/UTC"
 
 # Define paths
 ENV COMFYUI_PATH=/root/comfy/ComfyUI
+
 ENV VENV_PATH=/venv
 
-# Update package lists and install necessary system packages
-RUN apt-get update && \
-    # Set debconf frontend to noninteractive to suppress prompts
-    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-    apt-get install -y \
-        gcc \
-        gfortran \
-        build-essential \
-        git \
-        wget \
-        libgl1 \
-        ffmpeg \
-        curl && \
-    # Install git-lfs
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
-    apt-get install -y git-lfs && \
-    git lfs install && \
-    # Clean up to reduce image size
-    apt-get autoremove -y && apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    ffmpeg \
+    wget
+
+# 安装 git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
+    && apt-get install -y git-lfs \
+    && git lfs install
+
+# Clean up to reduce image size
+RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Create a virtual environment
 RUN python -m venv $VENV_PATH
@@ -43,7 +38,7 @@ RUN /venv/bin/python -m pip install --upgrade pip
 RUN /venv/bin/python -m pip install comfy-cli
 
 # Install ComfyUI using comfy-cli within the virtual environment
-RUN comfy --skip-prompt install --nvidia --cuda-version 12.6
+RUN comfy --skip-prompt install --nvidia --cuda-version 12.4
 
 # Install required Python packages within the virtual environment
 RUN /venv/bin/python -m pip install \
@@ -124,7 +119,7 @@ RUN git clone https://huggingface.co/google-bert/bert-base-uncased $COMFYUI_PATH
     git clone https://huggingface.co/deepseek-ai/Janus-Pro-7B $COMFYUI_PATH/models/Janus-Pro/Janus-Pro-7B
 
 # Force reinstall timm within the virtual environment
-RUN /venv/bin/python -m pip install --upgrade timm==0.9.16
+RUN /venv/bin/python -m pip install --force-reinstall timm
 
 # Create directories and download additional files using huggingface-cli
 RUN mkdir -p $COMFYUI_PATH/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators && \
@@ -138,8 +133,6 @@ COPY config.ini $COMFYUI_PATH/user/default/ComfyUI-Manager/config.ini
 
 # Make the startup script executable
 RUN chmod +x /root/start.sh
-
-RUN /venv/bin/python -c "import timm; print('timm version:', timm.__version__); import timm.layers"
 
 # Define the default command to run when the container starts
 CMD ["/root/start.sh"]
