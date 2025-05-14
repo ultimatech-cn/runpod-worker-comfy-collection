@@ -124,7 +124,7 @@ RUN git clone https://huggingface.co/google-bert/bert-base-uncased $COMFYUI_PATH
     git clone https://huggingface.co/deepseek-ai/Janus-Pro-7B $COMFYUI_PATH/models/Janus-Pro/Janus-Pro-7B
 
 # Force reinstall timm within the virtual environment
-RUN /venv/bin/python -m pip install --force-reinstall "timm>=0.9.16"
+RUN /venv/bin/python -m pip install --upgrade timm==0.9.16
 
 # Create directories and download additional files using huggingface-cli
 RUN mkdir -p $COMFYUI_PATH/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators && \
@@ -138,6 +138,8 @@ COPY config.ini $COMFYUI_PATH/user/default/ComfyUI-Manager/config.ini
 
 # Make the startup script executable
 RUN chmod +x /root/start.sh
+
+RUN /venv/bin/python -c "import timm; print('timm version:', timm.__version__); import timm.layers"
 
 # Define the default command to run when the container starts
 CMD ["/root/start.sh"]
