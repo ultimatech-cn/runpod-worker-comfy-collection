@@ -6,7 +6,7 @@ export LD_PRELOAD="${TCMALLOC}"
 
 sed -i 's/timm\.layers/timm\.models\.layers/g'  /venv/lib/python3.11/site-packages/janus/models/siglip_vit.py
 
-rm -rf  /root/comfy/ComfyUI/custom_nodes/ComfyUI-tbox/src
+rm -rf  /root/comfy/ComfyUI/custom_nodes/ComfyUI-tbox/src/timm
 
 rm -rf /venv/lib/python3.11/site-packages/timm/models/layers
 
