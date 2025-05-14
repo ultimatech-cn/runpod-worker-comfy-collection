@@ -6,7 +6,7 @@ ENV TZ="Etc/UTC"
 
 # Define paths
 ENV COMFYUI_PATH=/root/comfy/ComfyUI
-ENV VENV_PATH=/root/comfy/ComfyUI/venv
+ENV VENV_PATH=/venv
 
 # Update package lists and install necessary system packages
 RUN apt-get update && \
@@ -33,20 +33,20 @@ RUN apt-get update && \
 RUN python -m venv $VENV_PATH
 
 # Ensure that the virtual environment's bin directory is in the PATH
-# This makes 'python' and 'pip' point to the venv's executables by default
+# This makes 'python' and '/venv/bin/python -m pip' point to the venv's executables by default
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-# Upgrade pip within the virtual environment
-RUN pip install --upgrade pip
+# Upgrade /venv/bin/python -m pip within the virtual environment
+RUN /venv/bin/python -m install --upgrade pip
 
 # Install comfy-cli within the virtual environment
-RUN pip install comfy-cli
+RUN /venv/bin/python -m pip install comfy-cli
 
 # Install ComfyUI using comfy-cli within the virtual environment
 RUN comfy --skip-prompt install --nvidia --cuda-version 12.6
 
 # Install required Python packages within the virtual environment
-RUN pip install \
+RUN /venv/bin/python -m pip install \
     "fastapi[standard]==0.115.4" \
     opencv-python \
     imageio-ffmpeg \
@@ -62,33 +62,33 @@ RUN pip install \
 # Clone custom node repositories and install their Python dependencies
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager /root/comfy/ComfyUI/custom_nodes/comfyui-manager
 RUN git clone https://github.com/Fannovel16/comfyui_controlnet_aux /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_controlnet_aux/requirements.txt
 RUN git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git /root/comfy/ComfyUI/custom_nodes/ComfyUI-Custom-Scripts
 RUN git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui-impact-pack/requirements.txt
 RUN git clone https://github.com/chflame163/ComfyUI_LayerStyle /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_LayerStyle/requirements.txt
 RUN git clone https://github.com/yolain/ComfyUI-Easy-Use /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Easy-Use/requirements.txt
 RUN git clone https://github.com/kijai/ComfyUI-KJNodes.git /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-KJNodes/requirements.txt
 RUN git clone https://github.com/jags111/efficiency-nodes-comfyui /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/efficiency-nodes-comfyui/requirements.txt
 RUN git clone https://github.com/storyicon/comfyui_segment_anything.git /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfyui_segment_anything/requirements.txt
 RUN git clone https://github.com/pythongosssss/ComfyUI-WD14-Tagger /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-WD14-Tagger/requirements.txt
 RUN git clone https://github.com/cubiq/ComfyUI_essentials.git /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI_essentials/requirements.txt
 RUN git clone https://github.com/ZHO-ZHO-ZHO/ComfyUI-Gemini /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Gemini/requirements.txt
 RUN git clone https://github.com/chrisgoringe/cg-use-everywhere /root/comfy/ComfyUI/custom_nodes/cg-use-everywhere
 RUN git clone https://github.com/CY-CHENYUE/ComfyUI-Janus-Pro /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/ComfyUI-Janus-Pro/requirements.txt
 RUN git clone https://github.com/melMass/comfy_mtb /root/comfy/ComfyUI/custom_nodes/comfy_mtb \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/comfy_mtb/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/comfy_mtb/requirements.txt
 RUN git clone https://github.com/wallish77/wlsh_nodes /root/comfy/ComfyUI/custom_nodes/wlsh_nodes \
-    && pip install -r /root/comfy/ComfyUI/custom_nodes/wlsh_nodes/requirements.txt
+    && /venv/bin/python -m pip install -r /root/comfy/ComfyUI/custom_nodes/wlsh_nodes/requirements.txt
 RUN git clone https://github.com/M1kep/ComfyLiterals /root/comfy/ComfyUI/custom_nodes/ComfyLiterals
 RUN git clone https://github.com/ai-shizuka/ComfyUI-tbox /root/comfy/ComfyUI/custom_nodes/ComfyUI-tbox
 RUN git clone https://github.com/Goktug/comfyui-saveimage-plus /root/comfy/ComfyUI/custom_nodes/comfyui-saveimage-plus
@@ -124,7 +124,7 @@ RUN git clone https://huggingface.co/google-bert/bert-base-uncased $COMFYUI_PATH
     git clone https://huggingface.co/deepseek-ai/Janus-Pro-7B $COMFYUI_PATH/models/Janus-Pro/Janus-Pro-7B
 
 # Force reinstall timm within the virtual environment
-RUN pip install --force-reinstall "timm>=0.9.16"
+RUN /venv/bin/python -m pip install --force-reinstall "timm>=0.9.16"
 
 # Create directories and download additional files using huggingface-cli
 RUN mkdir -p $COMFYUI_PATH/custom_nodes/comfyui_controlnet_aux/ckpts/lllyasviel/Annotators && \
