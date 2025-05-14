@@ -37,7 +37,7 @@ RUN python -m venv $VENV_PATH
 ENV PATH="$VENV_PATH/bin:$PATH"
 
 # Upgrade /venv/bin/python -m pip within the virtual environment
-RUN /venv/bin/python -m install --upgrade pip
+RUN /venv/bin/python -m pip install --upgrade pip
 
 # Install comfy-cli within the virtual environment
 RUN /venv/bin/python -m pip install comfy-cli
