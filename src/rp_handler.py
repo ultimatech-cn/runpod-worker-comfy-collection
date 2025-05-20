@@ -58,19 +58,8 @@ def validate_input(job_input):
     if workflow is None:
         return None, "Missing 'workflow' parameter"
 
-    # Validate 'images' in input, if provided
-    images = job_input.get("images")
-    if images is not None:
-        if not isinstance(images, list) or not all(
-                "name" in image and "image" in image for image in images
-        ):
-            return (
-                None,
-                "'images' must be a list of objects with 'name' and 'image' keys",
-            )
-
     # Return validated data and no error
-    return {"workflow": workflow, "images": images}, None
+    return {"workflow": workflow}, None
 
 
 def check_server(url, retries=500, delay=50):
@@ -321,7 +310,6 @@ def handler(job):
 
     # Extract validated data
     workflow = validated_data["workflow"]
-    images = validated_data.get("images")
 
     # Make sure that the ComfyUI API is available
     check_server(
@@ -329,12 +317,6 @@ def handler(job):
         COMFY_API_AVAILABLE_MAX_RETRIES,
         COMFY_API_AVAILABLE_INTERVAL_MS,
     )
-
-    # Upload images if they exist
-    upload_result = upload_images(images)
-
-    if upload_result["status"] == "error":
-        return upload_result
 
     # Queue the workflow
     try:
