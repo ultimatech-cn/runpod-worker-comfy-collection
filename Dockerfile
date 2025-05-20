@@ -61,7 +61,7 @@ RUN huggingface-cli download ostris/OpenFLUX.1 openflux1-v0.1.0-fast-lora.safete
 RUN mv $COMFYUI_PATH/models/loras/diffusion_pytorch_model.safetensors $COMFYUI_PATH/models/loras/FLUX_1-Turbo-Alpha.safetensors
 
 # Download other necessary files
-RUN RUN wget -q -O $COMFYUI_PATH/models/unet/fluxmania_V.safetensors "https://civitai.com/api/download/models/1539776?token=6046bea046d4fef4b2d55909b4512f1d"
+RUN wget -q -O $COMFYUI_PATH/models/unet/fluxmania_V.safetensors "https://civitai.com/api/download/models/1539776?token=6046bea046d4fef4b2d55909b4512f1d"
 
 RUN git clone https://github.com/ltdrdata/ComfyUI-Manager $COMFYUI_PATH/custom_nodes/comfyui-manager && \
     git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack $COMFYUI_PATH/custom_nodes/comfyui-impact-pack && \
