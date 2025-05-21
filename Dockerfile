@@ -73,7 +73,13 @@ RUN git clone https://github.com/ltdrdata/ComfyUI-Manager $COMFYUI_PATH/custom_n
     python -m pip install -r $COMFYUI_PATH/custom_nodes/ComfyUI-Impact-Subpack/requirements.txt && \
     git clone https://github.com/calcuis/gguf.git $COMFYUI_PATH/custom_nodes/gguf && \
     git clone https://github.com/jjkramhoeft/ComfyUI-Jjk-Nodes.git $COMFYUI_PATH/custom_nodes/ComfyUI-Jjk-Nodes && \
-    git clone https://github.com/MzMaXaM/ComfyUi-MzMaXaM.git $COMFYUI_PATH/custom_nodes/ComfyUi-MzMaXaM
+    git clone https://github.com/MzMaXaM/ComfyUi-MzMaXaM.git $COMFYUI_PATH/custom_nodes/ComfyUi-MzMaXaM && \
+    git clone https://github.com/cubiq/ComfyUI_essentials.git $COMFYUI_PATH/custom_nodes/ComfyUI_essentials && \
+    python -s -m pip install -r $COMFYUI_PATH/custom_nodes/ComfyUI_essentials/requirements.txt && \
+    git clone https://github.com/Fannovel16/comfyui_controlnet_aux $COMFYUI_PATH/custom_nodes/comfyui_controlnet_aux && \
+    python -s -m pip install -r $COMFYUI_PATH/custom_nodes/comfyui_controlnet_aux/requirements.txt && \
+    git clone https://github.com/WASasquatch/was-node-suite-comfyui $COMFYUI_PATH/custom_nodes/was-node-suite-comfyui && \
+    pip install -r $COMFYUI_PATH/custom_nodes/was-node-suite-comfyui/requirements.txt
 
 # Copy necessary scripts and configuration files into the container
 COPY src/start.sh /root/
