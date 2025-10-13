@@ -76,7 +76,7 @@ def handler(job):
     prompt_workflow["31"]["inputs"]["seed"] = seed
 
     # --- 运行工作流 ---
-    final_output_node_id = "238"
+    final_output_node_id = "302"
     
     try:
         images_output = api.queue_prompt_and_get_images(prompt_workflow, final_output_node_id)
