@@ -129,14 +129,14 @@ RUN git clone https://github.com/Gourieff/ComfyUI-ReActor.git $COMFYUI_PATH/cust
 
 # --- 8. 复制脚本并设置权限 ---
 # 将本地的启动脚本和处理器复制到镜像中
-COPY src/start.sh /
-COPY src/rp_handler.py /
-COPY src/ComfyUI_API_Wrapper.py /
+COPY src/start.sh /root/start.sh
+COPY src/rp_handler.py /root/rp_handler.py
+COPY src/ComfyUI_API_Wrapper.py /root/ComfyUI_API_Wrapper.py
+COPY workflow.json /root/workflow.json
 
 # 赋予启动脚本执行权限
-RUN chmod +x /start.sh
-
+RUN chmod +x /root/start.sh
 
 # --- 9. 定义容器启动命令 ---
 # 设置容器启动时执行的默认命令
-CMD ["/start.sh"]
+CMD ["/root/start.sh"]
