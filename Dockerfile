@@ -131,6 +131,7 @@ RUN git clone https://github.com/Gourieff/ComfyUI-ReActor.git $COMFYUI_PATH/cust
 # 将本地的启动脚本和处理器复制到镜像中
 COPY src/start.sh /
 COPY src/rp_handler.py /
+COPY src/ComfyUI_API_Wrapper.py /
 
 # 赋予启动脚本执行权限
 RUN chmod +x /start.sh
