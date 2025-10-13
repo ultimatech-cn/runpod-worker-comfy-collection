@@ -128,7 +128,7 @@
   },
   "31": {
     "inputs": {
-      "seed": 1083848170220632,
+      "seed": 499639846483072,
       "steps": 20,
       "cfg": 2,
       "sampler_name": "dpmpp_2m_sde_gpu",
@@ -163,8 +163,8 @@
         0
       ],
       "vae": [
-        "38",
-        2
+        "303",
+        0
       ]
     },
     "class_type": "VAEEncode",
@@ -277,8 +277,8 @@
         0
       ],
       "vae": [
-        "38",
-        2
+        "303",
+        0
       ]
     },
     "class_type": "VAEDecode",
@@ -364,8 +364,8 @@
         0
       ],
       "vae": [
-        "38",
-        2
+        "303",
+        0
       ],
       "image": [
         "182",
@@ -411,8 +411,8 @@
         0
       ],
       "vae": [
-        "38",
-        2
+        "303",
+        0
       ],
       "image": [
         "254",
@@ -486,7 +486,7 @@
         "261",
         0
       ],
-      "seed": 970647667141929,
+      "seed": 491125745926246,
       "steps": 1,
       "cfg": 8,
       "sampler_name": "euler",
@@ -524,8 +524,8 @@
         1
       ],
       "vae": [
-        "38",
-        2
+        "303",
+        0
       ],
       "positive": [
         "33",
@@ -588,33 +588,6 @@
       "title": "Grow Mask With Blur"
     }
   },
-  "238": {
-    "inputs": {
-      "output_path": "",
-      "filename_prefix": "ComfyUI",
-      "filename_delimiter": "_",
-      "filename_number_padding": 4,
-      "filename_number_start": "false",
-      "extension": "jpg",
-      "dpi": 300,
-      "quality": 90,
-      "optimize_image": "true",
-      "lossless_webp": "false",
-      "overwrite_mode": "false",
-      "show_history": "false",
-      "show_history_by_prefix": "true",
-      "embed_workflow": "false",
-      "show_previews": "false",
-      "images": [
-        "118",
-        0
-      ]
-    },
-    "class_type": "Image Save",
-    "_meta": {
-      "title": "Image Save"
-    }
-  },
   "244": {
     "inputs": {
       "int_a": [
@@ -657,36 +630,6 @@
     "class_type": "ImageRGBA2RGB",
     "_meta": {
       "title": "Convert RGBA to RGB 🌌 ReActor"
-    }
-  },
-  "258": {
-    "inputs": {
-      "rgthree_comparer": {
-        "images": [
-          {
-            "name": "A",
-            "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_rgbqb_00003_.png&type=temp&subfolder=&rand=0.6936393130665818"
-          },
-          {
-            "name": "B",
-            "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_rgbqb_00004_.png&type=temp&subfolder=&rand=0.8815594409800512"
-          }
-        ]
-      },
-      "image_a": [
-        "238",
-        0
-      ],
-      "image_b": [
-        "101",
-        0
-      ]
-    },
-    "class_type": "Image Comparer (rgthree)",
-    "_meta": {
-      "title": "Image Comparer (rgthree)"
     }
   },
   "261": {
@@ -806,47 +749,11 @@
       "title": "Load Image"
     }
   },
-  "299": {
-    "inputs": {
-      "images": [
-        "182",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
-  "300": {
-    "inputs": {
-      "images": [
-        "101",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
-  "301": {
-    "inputs": {
-      "images": [
-        "254",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
   "302": {
     "inputs": {
       "filename_prefix": "ComfyUI",
       "images": [
-        "238",
+        "118",
         0
       ]
     },
@@ -855,15 +762,13 @@
       "title": "Save Image"
     }
   },
-  "304": {
+  "303": {
     "inputs": {
-      "invert_mask": true,
-      "blend_mode": "normal",
-      "opacity": 100
+      "vae_name": "sdxl_vae.safetensors"
     },
-    "class_type": "LayerUtility: ImageBlend",
+    "class_type": "VAELoader",
     "_meta": {
-      "title": "LayerUtility: ImageBlend"
+      "title": "Load VAE"
     }
   },
   "305": {
