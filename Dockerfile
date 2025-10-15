@@ -75,7 +75,7 @@ RUN git clone https://github.com/Extraltodeus/ComfyUI-AutomaticCFG.git $COMFYUI_
 COPY src/start.sh /root/start.sh
 COPY src/rp_handler.py /root/rp_handler.py
 COPY src/ComfyUI_API_Wrapper.py /root/ComfyUI_API_Wrapper.py
-COPY workflow.json /root/workflow.json
+COPY src/workflow_api.json /root/workflow_api.json # <--- 添加这一行
 
 # 赋予启动脚本执行权限
 RUN chmod +x /root/start.sh
