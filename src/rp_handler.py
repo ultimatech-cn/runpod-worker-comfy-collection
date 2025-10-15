@@ -47,7 +47,6 @@ def handler(job):
         if not download_image(image_url, save_path):
             return {"error": f"无法从指定的URL下载图片: {image_url}"}
 
-        # 寻找第一个LoadImage节点并替换其图片
         load_image_node_id = None
         for node_id, node_data in workflow.items():
             if node_data.get("class_type") == "LoadImage":
