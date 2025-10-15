@@ -29,7 +29,7 @@ import json
 import uuid
 import runpod
 import requests
-from ComfyUI_API_Wrapper import ComfyUIAPIWrapper
+from ComfyUI_API_Wrapper import ComfyUI_API_Wrapper
 
 # --- 全局变量和初始化 ---
 # ComfyUI 的本地URL
@@ -38,7 +38,7 @@ COMFYUI_URL = "http://127.0.0.1:8188"
 WORKFLOW_TEMPLATE_FILE = "/root/workflow_api.json"
 
 # 初始化API包装器
-api = ComfyUIAPIWrapper(COMFYUI_URL)
+api = ComfyUI_API_Wrapper(COMFYUI_URL)
 
 # --- 辅助函数: 下载图片 ---
 def download_image(url, save_path):
