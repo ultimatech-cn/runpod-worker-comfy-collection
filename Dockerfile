@@ -40,7 +40,7 @@ RUN mkdir -p \
     $COMFYUI_PATH/models/upscale_models
 
 # --- 6. 下载所有模型文件 ---
-RUN wget -O $COMFYUI_PATH/models/checkpoints/epicrealism_naturalSinRC1VAE.safetensors "https://huggingface.co/dtarnow/epicrealism_naturalSinRC1VAE/resolve/main/epicrealism_naturalSinRC1VAE.safetensors"
+RUN wget -O $COMFYUI_PATH/models/checkpoints/epicrealism_naturalSinRC1VAE.safetensors "https://huggingface.co/dtarnow/epicrealism_naturalSinRC1VAE/resolve/a941b77c791f939be58b4cf8e2bfcbcd6f32c6d6/epicrealism_naturalSinRC1VAE.safetensors"
 RUN wget -O $COMFYUI_PATH/models/loras/more_details.safetensors "https://huggingface.co/digiplay/LORA/resolve/main/more_details.safetensors"
 RUN wget -O $COMFYUI_PATH/models/loras/SDXLrender_v2.0.safetensors "https://huggingface.co/philz1337x/loras/resolve/main/SDXLrender_v2.0.safetensors"
 RUN wget -O $COMFYUI_PATH/models/controlnet/control_v11f1e_sd15_tile.pth "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/control_v11f1e_sd15_tile.pth"
