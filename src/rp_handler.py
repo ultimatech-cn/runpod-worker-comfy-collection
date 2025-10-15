@@ -1,3 +1,29 @@
+# ================== 临时诊断代码开始 ==================
+import os
+print("--- STARTING DIAGNOSTIC CHECK ---")
+wrapper_file_path = "/root/ComfyUI_API_Wrapper.py"
+print(f"Checking for file at: {wrapper_file_path}")
+
+if os.path.exists(wrapper_file_path):
+    print("File FOUND. Reading contents...")
+    try:
+        with open(wrapper_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            print("--- FILE CONTENT START ---")
+            print(content)
+            print("--- FILE CONTENT END ---")
+            if "class ComfyUIAPIWrapper" in content:
+                print("DIAGNOSTIC SUCCESS: The class name 'ComfyUIAPIWrapper' was found in the file.")
+            else:
+                print("DIAGNOSTIC WARNING: The exact string 'class ComfyUIAPIWrapper' was NOT found.")
+    except Exception as e:
+        print(f"Error reading file: {e}")
+else:
+    print("DIAGNOSTIC ERROR: File NOT FOUND.")
+
+print("--- END OF DIAGNOSTIC CHECK ---\n")
+# ================== 临时诊断代码结束 ==================
+
 import os
 import json
 import uuid
